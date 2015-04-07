@@ -1,0 +1,58 @@
+// Establish version and status
+ext {
+  githubProjectName = rootProject.name // Change if github project name is not the same as the root project's name
+}
+
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral() // maven { url 'http://jcenter.bintray.com' }
+  }
+  apply from: file('gradle/buildscript.gradle'), to: buildscript
+}
+
+allprojects {
+  apply plugin: 'idea'
+  apply plugin: 'eclipse'
+  repositories {
+    mavenLocal()
+    mavenCentral() // maven { url: 'http://jcenter.bintray.com' }
+  }
+}
+
+
+apply from: file('gradle/convention.gradle')
+apply from: file('gradle/maven.gradle')
+// apply from: file('gradle/check.gradle')
+// apply from: file('gradle/license.gradle')
+apply from: file('gradle/release.gradle')
+
+subprojects {
+  group = "me.tango.${githubProjectName}" // TEMPLATE: Set to organization of project
+}
+
+project(':toruk-server') {
+  apply plugin: 'scala'
+
+  repositories {
+    mavenCentral()
+    maven {
+      url "http://repo.akka.io/snapshots/"
+    }
+  }
+
+  dependencies {
+    compile     'org.apache.thrift:libthrift:0.9.2'
+    compile     'org.rocksdb:rocksdbjni:3.9.1'
+    compile     'com.typesafe.akka:akka-actor_2.11:2.4-SNAPSHOT'
+    compile     'org.scala-lang:scala-library:2.11.5'
+  }
+
+}
+
+project(':toruk-client') {
+  apply plugin: 'java'
+  dependencies {
+    // compile project(':hdfs')
+  }
+}

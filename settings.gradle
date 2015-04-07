@@ -1,0 +1,2 @@
+rootProject.name='toruk'
+include 'toruk-server','toruk-client'
